@@ -1,0 +1,32 @@
+<script src="./js/jquery.min.js"></script>
+<script src="./js/data.network.js"></script>
+<script>
+send = function(cypher, cb) 	{
+	var response = $.ajax({
+		type:"POST",
+		url: "http://localhost:7474/db/data/cypher",
+		dataType: "json",
+		contentType:"application/json",
+		headers: { 
+			"X-Stream": "true"    
+		},
+		 data: JSON.stringify({ "query" : cypher }),
+		 error: function() {
+				console.log("ERROR:"+cypher);
+		 },
+		 success: function(data) {
+				$( this ).addClass( "done" );
+				console.log("SUCCESS:"+cypher+"\n");
+				if(cb!=null) cb();
+		 }
+	});
+};
+var create = function() {
+	console.log("PASS delete phase");
+	var count=0;
+	nodes.forEach(function(n){send("CREATE (n" + (count++) + ":" + (n.cat==="VM"||n.cat==="Host"?"ComputeUnit":n.cat==="ROOT"?"ROOT":n.cat==="Network"?"Network":"AggregationDistribution") + " {key:\"" + n.id + "\", name:\"" +  n.label + "\", type:\"" + n.cat + "\"}) RETURN n"+(count-1))})
+	count=0;
+	edges.forEach(function(e){send("MATCH (n"  + (count++) + " {key:\"" + e.source + "\"}), (n" + (count++) + " {key:\"" + e.target + "\"}) CREATE (n" + (count-2) + ")-[r:HAS]->(n" + (count-1) + ")")});
+}
+send("MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n,r", create());
+</script>

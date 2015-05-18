@@ -1,0 +1,36 @@
+<script src="./js/async.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script type="text/javascript" src="./js/async.js"></script>
+<script src="./js/other/data.translated.js"></script>
+<script>
+send = (function(cypher) { 
+	return function(callback) 	{
+		var response = $.ajax({ type:"POST", url: "https://localhost:7473/db/data/cypher", dataType: "json", contentType:"application/json", headers: { "X-Stream": "true" }, data: JSON.stringify({ "query" : cypher }), 
+			error: function() { 
+				console.log("ERROR:" + cypher); 
+				callback(null, null);
+			},
+			success: function(data) {
+				console.log("CREATE:" + cypher); 
+				callback(null, null);
+			}
+		});
+	}
+});
+var tasks_node = [];
+var tasks_edge = [];
+var count=0;
+nodes.forEach(function(n){tasks_node.push(send("CREATE (n" + (count++) + ":" + (n.cat==="VirtualMachineQuery"||n.cat==="HostSystemQuery"?"ComputeUnit":n.cat==="ROOT"?"ROOT":n.cat==="NetworkQuery"?"Network":"AggregationDistribution") + " {key:\"" + n.id + "\", name:\"" +  n.label + "\", type:\"" + (n.cat==="VirtualMachineQuery"?"VM":n.cat==="HostSystemQuery"?"Host":n.cat==="ROOT"?"ROOT":n.cat==="NetworkQuery"?"Network":n.cat=="ClusterComputeResourceQuery"?"Cluster":n.cat==="DatacenterQuery"?"Datacenter":"Folder") + "\"}) RETURN n"+(count-1)))});
+count=0;
+edges.forEach(function(e){tasks_edge.push(send("MATCH (n"  + (count++) + " {key:\"" + e.source + "\"}), (n" + (count++) + " {key:\"" + e.target + "\"}) CREATE (n" + (count-2) + ")-[r:HAS]->(n" + (count-1) + ")"))});
+async.series(send("MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n,r"), 
+function (err, result) {
+	console.log("DELETE complete");
+	async.parallelLimit(tasks_node, 5, function(err, result) {
+		console.log("SEND nodes complete")
+		async.parallelLimit(tasks_edge, 5, function(err, result) {
+		console.log("SEND edges complete")
+		});
+	});
+});
+</script>

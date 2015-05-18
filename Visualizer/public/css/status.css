@@ -1,0 +1,45 @@
+.modal-backdrop {
+  z-index: -1;
+}
+#alert-pane, #warning-pane {
+  margin-top: 60px;
+  position: absolute;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  padding-left: 10px;
+  padding-right: 10px;
+  z-index: 1;
+  height: 40px;
+  left: 0px;
+}
+#alert-pane {
+  top: 10px;
+  background-color: #ed1c24;
+}
+#warning-pane {
+  top: 60px;
+  background-color: #ffa500;
+}
+#alert-pane:hover {
+  background-color: #fd3c44;
+}
+#warning-pane:hover {
+  background-color: #ffc520;
+}
+#alert-pane h4, #warning-pane h4 {
+  color: white;
+}
+#alert, #warning {
+  text-decoration: none;
+}
+#alert .badge {
+  background-color: white;
+  color: #ed1c24;
+}
+#warning .badge {
+  background-color: white;
+  color: #ffa500;
+}
+#warnningDetail {
+  color: black;
+  font-size: 1em;
+}

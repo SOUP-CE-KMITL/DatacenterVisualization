@@ -1,0 +1,26 @@
+
+			<div id="content-right">
+				<div class="panel panel-default" style="position:absolute;right:0px;bottom:0px;top:0px;margin:5px 5px 5px 0px;">
+          <div class="panel-heading">
+            <i class="icon-beer icon-large"></i>
+            Hierapolis Rocks! ADSDWDWDWDWDWDW
+            <div class="panel-tools">
+              <div class="btn-group">
+                <a class="btn" href="#">
+                  <i class="icon-refresh"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="page-header">
+              <h4>System usage</h4>
+            </div>
+            <div class="progress">
+              <div class="progress-bar progress-bar-success" style="width: 35%"></div>
+              <div class="progress-bar progress-bar-warning" style="width: 20%"></div>
+              <div class="progress-bar progress-bar-danger" style="width: 10%"></div>
+            </div>
+          </div>
+        </div>
+			</div>
